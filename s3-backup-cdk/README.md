@@ -1,4 +1,4 @@
-This TypeScript project that creates the following resources:
+This is a TypeScript project that creates the following resources:
  * An Amazon S3 bucket to be used for backups
  * An AWS KMS key to encrypt the bucket
 
