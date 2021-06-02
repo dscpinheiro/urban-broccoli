@@ -12,12 +12,34 @@ export class BudgetAppStack extends cdk.Stack {
             minValue: 0
         });
 
-        const notificationEmail = new cdk.CfnParameter(this, 'NotificationEmail');
+        const notificationAddress = new cdk.CfnParameter(this, 'NotificationAddress');
+
+        const notificationType = new cdk.CfnParameter(this, 'NotificationType', {
+            type: 'String',
+            default: 'EMAIL',
+            allowedValues: ['EMAIL', 'SNS']
+        });
+
+        this.templateOptions.metadata = {
+            'AWS::CloudFormation::Interface': {
+                ParameterLabels: {
+                    [thresholdAmount.logicalId]: {
+                        default: 'Budgeted amount (in USD)'
+                    },
+                    [notificationAddress.logicalId]: {
+                        default: 'Address that AWS sends budget notifications to, either an SNS topic or an email'
+                    },
+                    [notificationType.logicalId]: {
+                        default: 'Type of notification that AWS sends to a subscriber'
+                    }
+                }
+            }
+        };
 
         // Resources
         const budgetSubscribers = [{
-            address: notificationEmail.valueAsString,
-            subscriptionType: 'EMAIL'
+            address: notificationAddress.valueAsString,
+            subscriptionType: notificationType.valueAsString
         }];
 
         const myBudget = new budgets.CfnBudget(this, 'MonthlyBudget', {
