@@ -22,6 +22,16 @@ export class BudgetAppStack extends cdk.Stack {
 
         this.templateOptions.metadata = {
             'AWS::CloudFormation::Interface': {
+                ParameterGroups: [
+                    {
+                        Label: { default: 'AWS Budget configuration' },
+                        Parameters: [
+                            thresholdAmount.logicalId,
+                            notificationAddress.logicalId,
+                            notificationType.logicalId
+                        ]
+                    }
+                ],
                 ParameterLabels: {
                     [thresholdAmount.logicalId]: {
                         default: 'Budgeted amount (in USD)'
