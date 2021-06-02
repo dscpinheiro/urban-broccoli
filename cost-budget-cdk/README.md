@@ -3,7 +3,8 @@ Sample CDK stack that creates an [AWS Budget](https://docs.aws.amazon.com/awsacc
 - Type of budget: Cost (_"Monitor your costs against a specified amount and receive alerts when your user-defined thresholds are met"_)
 - Period: Monthly
 - Budgeted amount: 50 USD (can be specified via the `BudgetThreshold` parameter)
-- Notification: E-mail (can be specified via the `NotificationEmail` parameter)
+- Notification Type: E-mail (can be specified via the `NotificationType` parameter)
+    - If using Amazon SNS, the budget must have permissions to send a notification to your topic (https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-sns-policy.html)
 - Thresholds:
     - Forecasted cost is greater than 50%
     - Forecasted cost is greater than 100%
