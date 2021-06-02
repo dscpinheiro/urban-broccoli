@@ -1,8 +1,8 @@
 {
-  "name": "cost-budget-cdk",
+  "name": "cost-budget-app",
   "version": "0.1.0",
   "bin": {
-    "cost-budget-cdk": "bin/cost-budget-cdk.js"
+    "cost-budget-app": "bin/cost-budget-app.js"
   },
   "scripts": {
     "build": "tsc",
