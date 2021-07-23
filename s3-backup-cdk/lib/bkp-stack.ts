@@ -80,12 +80,8 @@ export class BackupStack extends cdk.Stack {
             ]
         });
 
-        new cdk.CfnOutput(this, 'KmsKeyArn', {
-            value: backupKey.keyArn
-        });
-
-        new cdk.CfnOutput(this, 'BackupBucketArn', {
-            value: backupBucket.bucketArn
-        });
+        new cdk.CfnOutput(this, 'KmsKeyArn', { value: backupKey.keyArn });
+        new cdk.CfnOutput(this, 'BackupBucketArn', { value: backupBucket.bucketArn });
+        new cdk.CfnOutput(this, 'InventoryBucketArn', { value: inventoryBucket.bucketArn });
     }
 }
