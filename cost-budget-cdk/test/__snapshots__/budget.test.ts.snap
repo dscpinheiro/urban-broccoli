@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates cost budget 1`] = `
+Object {
+  "Metadata": Object {
+    "AWS::CloudFormation::Interface": Object {
+      "ParameterGroups": Array [
+        Object {
+          "Label": Object {
+            "default": "AWS Budget configuration",
+          },
+          "Parameters": Array [
+            "BudgetThreshold",
+            "NotificationAddress",
+            "NotificationType",
+          ],
+        },
+      ],
+      "ParameterLabels": Object {
+        "BudgetThreshold": Object {
+          "default": "Budgeted amount (in USD)",
+        },
+        "NotificationAddress": Object {
+          "default": "Address that AWS sends budget notifications to, either an SNS topic or an email",
+        },
+        "NotificationType": Object {
+          "default": "Type of notification that AWS sends to a subscriber",
+        },
+      },
+    },
+  },
+  "Outputs": Object {
+    "BudgetName": Object {
+      "Value": Object {
+        "Ref": "MonthlyBudget",
+      },
+    },
+  },
+  "Parameters": Object {
+    "BudgetThreshold": Object {
+      "Default": 50,
+      "MinValue": 0,
+      "Type": "Number",
+    },
+    "NotificationAddress": Object {
+      "Type": "String",
+    },
+    "NotificationType": Object {
+      "AllowedValues": Array [
+        "EMAIL",
+        "SNS",
+      ],
+      "Default": "EMAIL",
+      "Type": "String",
+    },
+  },
+  "Resources": Object {
+    "MonthlyBudget": Object {
+      "Properties": Object {
+        "Budget": Object {
+          "BudgetLimit": Object {
+            "Amount": Object {
+              "Ref": "BudgetThreshold",
+            },
+            "Unit": "USD",
+          },
+          "BudgetName": Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "monthly-budget-",
+                Object {
+                  "Ref": "AWS::AccountId",
+                },
+              ],
+            ],
+          },
+          "BudgetType": "COST",
+          "TimeUnit": "MONTHLY",
+        },
+        "NotificationsWithSubscribers": Array [
+          Object {
+            "Notification": Object {
+              "ComparisonOperator": "GREATER_THAN",
+              "NotificationType": "FORECASTED",
+              "Threshold": 50,
+              "ThresholdType": "PERCENTAGE",
+            },
+            "Subscribers": Array [
+              Object {
+                "Address": Object {
+                  "Ref": "NotificationAddress",
+                },
+                "SubscriptionType": Object {
+                  "Ref": "NotificationType",
+                },
+              },
+            ],
+          },
+          Object {
+            "Notification": Object {
+              "ComparisonOperator": "GREATER_THAN",
+              "NotificationType": "FORECASTED",
+              "Threshold": 100,
+              "ThresholdType": "PERCENTAGE",
+            },
+            "Subscribers": Array [
+              Object {
+                "Address": Object {
+                  "Ref": "NotificationAddress",
+                },
+                "SubscriptionType": Object {
+                  "Ref": "NotificationType",
+                },
+              },
+            ],
+          },
+          Object {
+            "Notification": Object {
+              "ComparisonOperator": "GREATER_THAN",
+              "NotificationType": "ACTUAL",
+              "Threshold": 100,
+              "ThresholdType": "PERCENTAGE",
+            },
+            "Subscribers": Array [
+              Object {
+                "Address": Object {
+                  "Ref": "NotificationAddress",
+                },
+                "SubscriptionType": Object {
+                  "Ref": "NotificationType",
+                },
+              },
+            ],
+          },
+          Object {
+            "Notification": Object {
+              "ComparisonOperator": "GREATER_THAN",
+              "NotificationType": "ACTUAL",
+              "Threshold": 200,
+              "ThresholdType": "PERCENTAGE",
+            },
+            "Subscribers": Array [
+              Object {
+                "Address": Object {
+                  "Ref": "NotificationAddress",
+                },
+                "SubscriptionType": Object {
+                  "Ref": "NotificationType",
+                },
+              },
+            ],
+          },
+          Object {
+            "Notification": Object {
+              "ComparisonOperator": "GREATER_THAN",
+              "NotificationType": "ACTUAL",
+              "Threshold": 300,
+              "ThresholdType": "PERCENTAGE",
+            },
+            "Subscribers": Array [
+              Object {
+                "Address": Object {
+                  "Ref": "NotificationAddress",
+                },
+                "SubscriptionType": Object {
+                  "Ref": "NotificationType",
+                },
+              },
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::Budgets::Budget",
+    },
+  },
+}
+`;

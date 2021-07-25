@@ -1,0 +1,361 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`creates the backup bucket and kms key 1`] = `
+Object {
+  "Outputs": Object {
+    "BackupBucketArn": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "BackupBucket26B8E51C",
+          "Arn",
+        ],
+      },
+    },
+    "InventoryBucketArn": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "InventoryBucketA869B8CB",
+          "Arn",
+        ],
+      },
+    },
+    "KmsKeyArn": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "S3BackupKeyB921581F",
+          "Arn",
+        ],
+      },
+    },
+  },
+  "Resources": Object {
+    "BackupBucket26B8E51C": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "BucketKeyEnabled": true,
+              "ServerSideEncryptionByDefault": Object {
+                "KMSMasterKeyID": Object {
+                  "Fn::GetAtt": Array [
+                    "S3BackupKeyB921581F",
+                    "Arn",
+                  ],
+                },
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "InventoryConfigurations": Array [
+          Object {
+            "Destination": Object {
+              "BucketAccountId": Object {
+                "Ref": "AWS::AccountId",
+              },
+              "BucketArn": Object {
+                "Fn::GetAtt": Array [
+                  "InventoryBucketA869B8CB",
+                  "Arn",
+                ],
+              },
+              "Format": "CSV",
+            },
+            "Enabled": true,
+            "Id": "backup-inventory",
+            "IncludedObjectVersions": "Current",
+            "OptionalFields": Array [
+              "Size",
+              "LastModifiedDate",
+              "StorageClass",
+              "ETag",
+            ],
+            "ScheduleFrequency": "Weekly",
+          },
+        ],
+        "LifecycleConfiguration": Object {
+          "Rules": Array [
+            Object {
+              "AbortIncompleteMultipartUpload": Object {
+                "DaysAfterInitiation": 7,
+              },
+              "Id": "BackupLifecycleRule",
+              "NoncurrentVersionExpirationInDays": 90,
+              "NoncurrentVersionTransitions": Array [
+                Object {
+                  "StorageClass": "ONEZONE_IA",
+                  "TransitionInDays": 45,
+                },
+              ],
+              "Status": "Enabled",
+              "Transitions": Array [
+                Object {
+                  "StorageClass": "STANDARD_IA",
+                  "TransitionInDays": 60,
+                },
+                Object {
+                  "StorageClass": "GLACIER",
+                  "TransitionInDays": 365,
+                },
+              ],
+            },
+          ],
+        },
+        "OwnershipControls": Object {
+          "Rules": Array [
+            Object {
+              "ObjectOwnership": "BucketOwnerPreferred",
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+        "VersioningConfiguration": Object {
+          "Status": "Enabled",
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "BackupKeyAdminPolicyC2660017": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:TagResource",
+                "kms:UntagResource",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::GetAtt": Array [
+                  "S3BackupKeyB921581F",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "BackupKeyAdminPolicyC2660017",
+        "Users": Array [
+          "keyadmin",
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "InventoryBucketA869B8CB": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "BucketEncryption": Object {
+          "ServerSideEncryptionConfiguration": Array [
+            Object {
+              "ServerSideEncryptionByDefault": Object {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "LifecycleConfiguration": Object {
+          "Rules": Array [
+            Object {
+              "AbortIncompleteMultipartUpload": Object {
+                "DaysAfterInitiation": 7,
+              },
+              "ExpirationInDays": 365,
+              "Id": "InventoryLifecycleRule",
+              "Status": "Enabled",
+              "Transitions": Array [
+                Object {
+                  "StorageClass": "STANDARD_IA",
+                  "TransitionInDays": 180,
+                },
+              ],
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": Object {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "InventoryBucketPolicyEDF94353": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "InventoryBucketA869B8CB",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:PutObject",
+              "Condition": Object {
+                "ArnLike": Object {
+                  "aws:SourceArn": Object {
+                    "Fn::GetAtt": Array [
+                      "BackupBucket26B8E51C",
+                      "Arn",
+                    ],
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "s3.amazonaws.com",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "InventoryBucketA869B8CB",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "InventoryBucketA869B8CB",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "S3BackupKeyAliasB27C0F2A": Object {
+      "Properties": Object {
+        "AliasName": "alias/s3-backup-key",
+        "TargetKeyId": Object {
+          "Fn::GetAtt": Array [
+            "S3BackupKeyB921581F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::KMS::Alias",
+    },
+    "S3BackupKeyB921581F": Object {
+      "DeletionPolicy": "Retain",
+      "Properties": Object {
+        "Description": "Key to be used for S3 SSE-KMS",
+        "Enabled": true,
+        "KeyPolicy": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+                "kms:GenerateDataKey",
+                "kms:TagResource",
+                "kms:UntagResource",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:TagResource",
+                "kms:UntagResource",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion",
+              ],
+              "Effect": "Allow",
+              "Principal": Object {
+                "AWS": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      Object {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":user/keyadmin",
+                    ],
+                  ],
+                },
+              },
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::KMS::Key",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+}
+`;
