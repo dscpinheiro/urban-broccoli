@@ -68,6 +68,7 @@ export class BackupStack extends cdk.Stack {
             versioned: true,
             inventories: [
                 {
+                    inventoryId: 'backup-inventory',
                     frequency: s3.InventoryFrequency.WEEKLY,
                     includeObjectVersions: s3.InventoryObjectVersion.CURRENT,
                     enabled: true,
