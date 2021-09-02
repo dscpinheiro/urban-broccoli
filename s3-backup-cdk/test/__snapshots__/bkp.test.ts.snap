@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`creates the backup bucket and kms key 1`] = `
+exports[`creates backup bucket and kms key 1`] = `
 Object {
   "Outputs": Object {
     "BackupBucketArn": Object {
