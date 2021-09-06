@@ -81,22 +81,18 @@ Object {
                 "DaysAfterInitiation": 7,
               },
               "Id": "BackupLifecycleRule",
-              "NoncurrentVersionExpirationInDays": 90,
+              "NoncurrentVersionExpirationInDays": 60,
               "NoncurrentVersionTransitions": Array [
                 Object {
                   "StorageClass": "ONEZONE_IA",
-                  "TransitionInDays": 45,
+                  "TransitionInDays": 30,
                 },
               ],
               "Status": "Enabled",
               "Transitions": Array [
                 Object {
-                  "StorageClass": "STANDARD_IA",
-                  "TransitionInDays": 60,
-                },
-                Object {
-                  "StorageClass": "GLACIER",
-                  "TransitionInDays": 365,
+                  "StorageClass": "INTELLIGENT_TIERING",
+                  "TransitionInDays": 30,
                 },
               ],
             },
@@ -179,15 +175,9 @@ Object {
               "AbortIncompleteMultipartUpload": Object {
                 "DaysAfterInitiation": 7,
               },
-              "ExpirationInDays": 365,
+              "ExpirationInDays": 60,
               "Id": "InventoryLifecycleRule",
               "Status": "Enabled",
-              "Transitions": Array [
-                Object {
-                  "StorageClass": "STANDARD_IA",
-                  "TransitionInDays": 180,
-                },
-              ],
             },
           ],
         },
