@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace RandomGen
@@ -12,8 +8,7 @@ namespace RandomGen
         private const string ALPHA_NUMERIC = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         private const string SPECIAL = @"!#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
 
-        private static readonly Dictionary<string, string> _words = new Dictionary<string, string>();
-        private static readonly Random _random = new Random();
+        private static readonly Dictionary<string, string> _words = new();
 
         static void Main()
         {
@@ -39,7 +34,7 @@ namespace RandomGen
             var chars = allowed.ToCharArray();
 
             var data = new byte[size];
-            using (var crypto = new RNGCryptoServiceProvider())
+            using (var crypto = RandomNumberGenerator.Create())
             {
                 crypto.GetBytes(data);
             }
@@ -70,7 +65,7 @@ namespace RandomGen
                 for (var j = 0; j < 5; j++)
                 {
                     // And each digit in that index is in the [1,6] range
-                    var value = _random.Next(1, 7);
+                    var value = Random.Shared.Next(1, 7);
                     index = string.Concat(index, value);
                 }
 
