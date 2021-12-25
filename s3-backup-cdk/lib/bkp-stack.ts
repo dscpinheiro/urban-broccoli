@@ -1,10 +1,13 @@
-import * as cdk from '@aws-cdk/core';
-import * as s3 from '@aws-cdk/aws-s3';
-import * as kms from '@aws-cdk/aws-kms';
-import * as iam from '@aws-cdk/aws-iam';
+import * as cdk from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import {
+    aws_s3 as s3,
+    aws_kms as kms,
+    aws_iam as iam
+} from 'aws-cdk-lib';
 
 export class BackupStack extends cdk.Stack {
-    constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
         const keyAdmin = iam.User.fromUserName(this, 'BackupKeyAdmin', 'keyadmin');

@@ -1,9 +1,15 @@
-import * as cdk from '@aws-cdk/core';
-import { SynthUtils } from '@aws-cdk/assert';
+import * as cdk from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
 import { BackupStack } from '../lib/bkp-stack';
 
 test('creates backup bucket and kms key', () => {
     const app = new cdk.App();
-    const stack = new BackupStack(app, 'TestStack');
-    expect(SynthUtils.toCloudFormation(stack)).toMatchSnapshot();
+    const stack = new BackupStack(app, 'TestStack', {
+        synthesizer: new cdk.DefaultStackSynthesizer({
+            generateBootstrapVersionRule: false
+        })
+    });
+
+    const template = Template.fromStack(stack);
+    expect(template).toMatchSnapshot();
 });
