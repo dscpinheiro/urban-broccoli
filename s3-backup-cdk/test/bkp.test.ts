@@ -1,5 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
-import { Template } from 'aws-cdk-lib/assertions';
+import { Template, Match } from 'aws-cdk-lib/assertions';
 import { BackupStack } from '../lib/bkp-stack';
 
 test('creates backup bucket and kms key', () => {
@@ -12,4 +12,20 @@ test('creates backup bucket and kms key', () => {
 
     const template = Template.fromStack(stack);
     expect(template).toMatchSnapshot();
+
+    template.resourceCountIs('AWS::S3::Bucket', 2);
+    template.resourceCountIs('AWS::S3::BucketPolicy', 2);
+
+    template.hasResourceProperties('AWS::KMS::Key', {
+        Enabled: true
+    });
+
+    template.hasResourceProperties('AWS::KMS::Alias', Match.objectEquals({
+        AliasName: 'alias/s3-backup-key',
+        TargetKeyId: { 'Fn::GetAtt': ['S3BackupKeyB921581F', 'Arn'] }
+    }));
+
+    template.hasOutput('KmsKeyArn', {
+        Value: Match.anyValue()
+    });
 });
