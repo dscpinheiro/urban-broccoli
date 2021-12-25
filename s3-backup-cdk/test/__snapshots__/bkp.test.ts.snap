@@ -80,6 +80,7 @@ Object {
               "AbortIncompleteMultipartUpload": Object {
                 "DaysAfterInitiation": 7,
               },
+              "ExpiredObjectDeleteMarker": true,
               "Id": "BackupLifecycleRule",
               "NoncurrentVersionExpirationInDays": 60,
               "NoncurrentVersionTransitions": Array [
@@ -101,7 +102,7 @@ Object {
         "OwnershipControls": Object {
           "Rules": Array [
             Object {
-              "ObjectOwnership": "BucketOwnerPreferred",
+              "ObjectOwnership": "BucketOwnerEnforced",
             },
           ],
         },
@@ -117,6 +118,53 @@ Object {
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
+    },
+    "BackupBucketPolicy8C403F71": Object {
+      "Properties": Object {
+        "Bucket": Object {
+          "Ref": "BackupBucket26B8E51C",
+        },
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "BackupBucket26B8E51C",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "BackupBucket26B8E51C",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
     },
     "BackupKeyAdminPolicyC2660017": Object {
       "Properties": Object {
@@ -181,6 +229,13 @@ Object {
             },
           ],
         },
+        "OwnershipControls": Object {
+          "Rules": Array [
+            Object {
+              "ObjectOwnership": "BucketOwnerEnforced",
+            },
+          ],
+        },
         "PublicAccessBlockConfiguration": Object {
           "BlockPublicAcls": true,
           "BlockPublicPolicy": true,
@@ -198,6 +253,40 @@ Object {
         },
         "PolicyDocument": Object {
           "Statement": Array [
+            Object {
+              "Action": "s3:*",
+              "Condition": Object {
+                "Bool": Object {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": Object {
+                "AWS": "*",
+              },
+              "Resource": Array [
+                Object {
+                  "Fn::GetAtt": Array [
+                    "InventoryBucketA869B8CB",
+                    "Arn",
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      Object {
+                        "Fn::GetAtt": Array [
+                          "InventoryBucketA869B8CB",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
             Object {
               "Action": "s3:PutObject",
               "Condition": Object {

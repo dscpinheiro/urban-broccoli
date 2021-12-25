@@ -21,7 +21,9 @@ export class BackupStack extends cdk.Stack {
 
         const inventoryBucket = new s3.Bucket(this, 'InventoryBucket', {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+            enforceSSL: true,
             encryption: s3.BucketEncryption.S3_MANAGED,
+            objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
             lifecycleRules: [
                 {
                     id: 'InventoryLifecycleRule',
@@ -35,6 +37,7 @@ export class BackupStack extends cdk.Stack {
         const backupBucket = new s3.Bucket(this, 'BackupBucket', {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             bucketKeyEnabled: true,
+            enforceSSL: true,
             encryption: s3.BucketEncryption.KMS,
             encryptionKey: backupKey,
             lifecycleRules: [
@@ -42,6 +45,7 @@ export class BackupStack extends cdk.Stack {
                     id: 'BackupLifecycleRule',
                     enabled: true,
                     abortIncompleteMultipartUploadAfter: cdk.Duration.days(7),
+                    expiredObjectDeleteMarker: true,
                     noncurrentVersionExpiration: cdk.Duration.days(60),
                     noncurrentVersionTransitions: [
                         {
@@ -57,7 +61,7 @@ export class BackupStack extends cdk.Stack {
                     ]
                 }
             ],
-            objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
+            objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
             versioned: true,
             inventories: [
                 {
