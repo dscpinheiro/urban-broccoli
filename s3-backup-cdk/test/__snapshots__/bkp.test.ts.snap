@@ -377,6 +377,8 @@ Object {
           ],
           "Version": "2012-10-17",
         },
+        "KeySpec": "SYMMETRIC_DEFAULT",
+        "KeyUsage": "ENCRYPT_DECRYPT",
       },
       "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Retain",

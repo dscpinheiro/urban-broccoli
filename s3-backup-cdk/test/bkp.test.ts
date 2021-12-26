@@ -17,7 +17,8 @@ test('creates backup bucket and kms key', () => {
     template.resourceCountIs('AWS::S3::BucketPolicy', 2);
 
     template.hasResourceProperties('AWS::KMS::Key', {
-        Enabled: true
+        Enabled: true,
+        EnableKeyRotation: Match.absent()
     });
 
     template.hasResourceProperties('AWS::KMS::Alias', Match.objectEquals({

@@ -16,7 +16,9 @@ export class BackupStack extends cdk.Stack {
             admins: [keyAdmin],
             alias: 's3-backup-key',
             description: 'Key to be used for S3 SSE-KMS',
-            enabled: true
+            enabled: true,
+            keySpec: kms.KeySpec.SYMMETRIC_DEFAULT,
+            keyUsage: kms.KeyUsage.ENCRYPT_DECRYPT
         });
 
         const inventoryBucket = new s3.Bucket(this, 'InventoryBucket', {
