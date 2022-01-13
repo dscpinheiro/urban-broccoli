@@ -85,6 +85,7 @@ Object {
               "NoncurrentVersionExpirationInDays": 60,
               "NoncurrentVersionTransitions": Array [
                 Object {
+                  "NewerNoncurrentVersions": 3,
                   "StorageClass": "ONEZONE_IA",
                   "TransitionInDays": 30,
                 },

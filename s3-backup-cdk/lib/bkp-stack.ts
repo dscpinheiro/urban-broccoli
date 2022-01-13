@@ -52,7 +52,8 @@ export class BackupStack extends cdk.Stack {
                     noncurrentVersionTransitions: [
                         {
                             storageClass: s3.StorageClass.ONE_ZONE_INFREQUENT_ACCESS,
-                            transitionAfter: cdk.Duration.days(30)
+                            transitionAfter: cdk.Duration.days(30),
+                            noncurrentVersionsToRetain: 3
                         }
                     ],
                     transitions: [
