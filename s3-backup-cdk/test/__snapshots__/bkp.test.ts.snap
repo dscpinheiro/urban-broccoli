@@ -82,7 +82,9 @@ Object {
               },
               "ExpiredObjectDeleteMarker": true,
               "Id": "BackupLifecycleRule",
-              "NoncurrentVersionExpirationInDays": 60,
+              "NoncurrentVersionExpiration": Object {
+                "NoncurrentDays": 60,
+              },
               "NoncurrentVersionTransitions": Array [
                 Object {
                   "NewerNoncurrentVersions": 3,
