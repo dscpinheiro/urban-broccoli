@@ -83,11 +83,11 @@ exports[`creates backup bucket and kms key 1`] = `
               "ExpiredObjectDeleteMarker": true,
               "Id": "BackupLifecycleRule",
               "NoncurrentVersionExpiration": {
-                "NoncurrentDays": 60,
+                "NoncurrentDays": 45,
               },
               "NoncurrentVersionTransitions": [
                 {
-                  "NewerNoncurrentVersions": 3,
+                  "NewerNoncurrentVersions": 2,
                   "StorageClass": "ONEZONE_IA",
                   "TransitionInDays": 30,
                 },
@@ -96,7 +96,7 @@ exports[`creates backup bucket and kms key 1`] = `
               "Transitions": [
                 {
                   "StorageClass": "INTELLIGENT_TIERING",
-                  "TransitionInDays": 30,
+                  "TransitionInDays": 14,
                 },
               ],
             },
@@ -187,7 +187,7 @@ exports[`creates backup bucket and kms key 1`] = `
               "AbortIncompleteMultipartUpload": {
                 "DaysAfterInitiation": 7,
               },
-              "ExpirationInDays": 60,
+              "ExpirationInDays": 45,
               "Id": "InventoryLifecycleRule",
               "Status": "Enabled",
             },

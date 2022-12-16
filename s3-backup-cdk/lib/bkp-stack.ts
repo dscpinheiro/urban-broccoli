@@ -28,7 +28,7 @@ export class BackupStack extends cdk.Stack {
                     id: 'InventoryLifecycleRule',
                     enabled: true,
                     abortIncompleteMultipartUploadAfter: cdk.Duration.days(7),
-                    expiration: cdk.Duration.days(60)
+                    expiration: cdk.Duration.days(45)
                 }
             ]
         });
@@ -45,18 +45,18 @@ export class BackupStack extends cdk.Stack {
                     enabled: true,
                     abortIncompleteMultipartUploadAfter: cdk.Duration.days(7),
                     expiredObjectDeleteMarker: true,
-                    noncurrentVersionExpiration: cdk.Duration.days(60),
+                    noncurrentVersionExpiration: cdk.Duration.days(45),
                     noncurrentVersionTransitions: [
                         {
                             storageClass: s3.StorageClass.ONE_ZONE_INFREQUENT_ACCESS,
                             transitionAfter: cdk.Duration.days(30),
-                            noncurrentVersionsToRetain: 3
+                            noncurrentVersionsToRetain: 2
                         }
                     ],
                     transitions: [
                         {
                             storageClass: s3.StorageClass.INTELLIGENT_TIERING,
-                            transitionAfter: cdk.Duration.days(30)
+                            transitionAfter: cdk.Duration.days(14)
                         }
                     ]
                 }
