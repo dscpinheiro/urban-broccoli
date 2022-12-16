@@ -10,10 +10,7 @@ export class BackupStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
-        const keyAdmin = iam.User.fromUserName(this, 'BackupKeyAdmin', 'keyadmin');
-
         const backupKey = new kms.Key(this, 'S3BackupKey', {
-            admins: [keyAdmin],
             alias: 's3-backup-key',
             description: 'Key to be used for S3 SSE-KMS',
             enabled: true,

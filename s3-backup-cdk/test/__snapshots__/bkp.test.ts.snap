@@ -1,44 +1,44 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`creates backup bucket and kms key 1`] = `
-Object {
-  "Outputs": Object {
-    "BackupBucketArn": Object {
-      "Value": Object {
-        "Fn::GetAtt": Array [
+{
+  "Outputs": {
+    "BackupBucketArn": {
+      "Value": {
+        "Fn::GetAtt": [
           "BackupBucket26B8E51C",
           "Arn",
         ],
       },
     },
-    "InventoryBucketArn": Object {
-      "Value": Object {
-        "Fn::GetAtt": Array [
+    "InventoryBucketArn": {
+      "Value": {
+        "Fn::GetAtt": [
           "InventoryBucketA869B8CB",
           "Arn",
         ],
       },
     },
-    "KmsKeyArn": Object {
-      "Value": Object {
-        "Fn::GetAtt": Array [
+    "KmsKeyArn": {
+      "Value": {
+        "Fn::GetAtt": [
           "S3BackupKeyB921581F",
           "Arn",
         ],
       },
     },
   },
-  "Resources": Object {
-    "BackupBucket26B8E51C": Object {
+  "Resources": {
+    "BackupBucket26B8E51C": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "BucketEncryption": Object {
-          "ServerSideEncryptionConfiguration": Array [
-            Object {
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
               "BucketKeyEnabled": true,
-              "ServerSideEncryptionByDefault": Object {
-                "KMSMasterKeyID": Object {
-                  "Fn::GetAtt": Array [
+              "ServerSideEncryptionByDefault": {
+                "KMSMasterKeyID": {
+                  "Fn::GetAtt": [
                     "S3BackupKeyB921581F",
                     "Arn",
                   ],
@@ -48,14 +48,14 @@ Object {
             },
           ],
         },
-        "InventoryConfigurations": Array [
-          Object {
-            "Destination": Object {
-              "BucketAccountId": Object {
+        "InventoryConfigurations": [
+          {
+            "Destination": {
+              "BucketAccountId": {
                 "Ref": "AWS::AccountId",
               },
-              "BucketArn": Object {
-                "Fn::GetAtt": Array [
+              "BucketArn": {
+                "Fn::GetAtt": [
                   "InventoryBucketA869B8CB",
                   "Arn",
                 ],
@@ -65,7 +65,7 @@ Object {
             "Enabled": true,
             "Id": "backup-inventory",
             "IncludedObjectVersions": "Current",
-            "OptionalFields": Array [
+            "OptionalFields": [
               "Size",
               "LastModifiedDate",
               "StorageClass",
@@ -74,27 +74,27 @@ Object {
             "ScheduleFrequency": "Weekly",
           },
         ],
-        "LifecycleConfiguration": Object {
-          "Rules": Array [
-            Object {
-              "AbortIncompleteMultipartUpload": Object {
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "AbortIncompleteMultipartUpload": {
                 "DaysAfterInitiation": 7,
               },
               "ExpiredObjectDeleteMarker": true,
               "Id": "BackupLifecycleRule",
-              "NoncurrentVersionExpiration": Object {
+              "NoncurrentVersionExpiration": {
                 "NoncurrentDays": 60,
               },
-              "NoncurrentVersionTransitions": Array [
-                Object {
+              "NoncurrentVersionTransitions": [
+                {
                   "NewerNoncurrentVersions": 3,
                   "StorageClass": "ONEZONE_IA",
                   "TransitionInDays": 30,
                 },
               ],
               "Status": "Enabled",
-              "Transitions": Array [
-                Object {
+              "Transitions": [
+                {
                   "StorageClass": "INTELLIGENT_TIERING",
                   "TransitionInDays": 30,
                 },
@@ -102,57 +102,57 @@ Object {
             },
           ],
         },
-        "OwnershipControls": Object {
-          "Rules": Array [
-            Object {
+        "OwnershipControls": {
+          "Rules": [
+            {
               "ObjectOwnership": "BucketOwnerEnforced",
             },
           ],
         },
-        "PublicAccessBlockConfiguration": Object {
+        "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": true,
           "BlockPublicPolicy": true,
           "IgnorePublicAcls": true,
           "RestrictPublicBuckets": true,
         },
-        "VersioningConfiguration": Object {
+        "VersioningConfiguration": {
           "Status": "Enabled",
         },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "BackupBucketPolicy8C403F71": Object {
-      "Properties": Object {
-        "Bucket": Object {
+    "BackupBucketPolicy8C403F71": {
+      "Properties": {
+        "Bucket": {
           "Ref": "BackupBucket26B8E51C",
         },
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:*",
-              "Condition": Object {
-                "Bool": Object {
+              "Condition": {
+                "Bool": {
                   "aws:SecureTransport": "false",
                 },
               },
               "Effect": "Deny",
-              "Principal": Object {
+              "Principal": {
                 "AWS": "*",
               },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
                     "BackupBucket26B8E51C",
                     "Arn",
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
+                    [
+                      {
+                        "Fn::GetAtt": [
                           "BackupBucket26B8E51C",
                           "Arn",
                         ],
@@ -169,61 +169,22 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "BackupKeyAdminPolicyC2660017": Object {
-      "Properties": Object {
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
-              "Action": Array [
-                "kms:Create*",
-                "kms:Describe*",
-                "kms:Enable*",
-                "kms:List*",
-                "kms:Put*",
-                "kms:Update*",
-                "kms:Revoke*",
-                "kms:Disable*",
-                "kms:Get*",
-                "kms:Delete*",
-                "kms:TagResource",
-                "kms:UntagResource",
-                "kms:ScheduleKeyDeletion",
-                "kms:CancelKeyDeletion",
-              ],
-              "Effect": "Allow",
-              "Resource": Object {
-                "Fn::GetAtt": Array [
-                  "S3BackupKeyB921581F",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "BackupKeyAdminPolicyC2660017",
-        "Users": Array [
-          "keyadmin",
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "InventoryBucketA869B8CB": Object {
+    "InventoryBucketA869B8CB": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
-        "BucketEncryption": Object {
-          "ServerSideEncryptionConfiguration": Array [
-            Object {
-              "ServerSideEncryptionByDefault": Object {
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
                 "SSEAlgorithm": "AES256",
               },
             },
           ],
         },
-        "LifecycleConfiguration": Object {
-          "Rules": Array [
-            Object {
-              "AbortIncompleteMultipartUpload": Object {
+        "LifecycleConfiguration": {
+          "Rules": [
+            {
+              "AbortIncompleteMultipartUpload": {
                 "DaysAfterInitiation": 7,
               },
               "ExpirationInDays": 60,
@@ -232,14 +193,14 @@ Object {
             },
           ],
         },
-        "OwnershipControls": Object {
-          "Rules": Array [
-            Object {
+        "OwnershipControls": {
+          "Rules": [
+            {
               "ObjectOwnership": "BucketOwnerEnforced",
             },
           ],
         },
-        "PublicAccessBlockConfiguration": Object {
+        "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": true,
           "BlockPublicPolicy": true,
           "IgnorePublicAcls": true,
@@ -249,37 +210,37 @@ Object {
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
     },
-    "InventoryBucketPolicyEDF94353": Object {
-      "Properties": Object {
-        "Bucket": Object {
+    "InventoryBucketPolicyEDF94353": {
+      "Properties": {
+        "Bucket": {
           "Ref": "InventoryBucketA869B8CB",
         },
-        "PolicyDocument": Object {
-          "Statement": Array [
-            Object {
+        "PolicyDocument": {
+          "Statement": [
+            {
               "Action": "s3:*",
-              "Condition": Object {
-                "Bool": Object {
+              "Condition": {
+                "Bool": {
                   "aws:SecureTransport": "false",
                 },
               },
               "Effect": "Deny",
-              "Principal": Object {
+              "Principal": {
                 "AWS": "*",
               },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
                     "InventoryBucketA869B8CB",
                     "Arn",
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
+                    [
+                      {
+                        "Fn::GetAtt": [
                           "InventoryBucketA869B8CB",
                           "Arn",
                         ],
@@ -290,12 +251,12 @@ Object {
                 },
               ],
             },
-            Object {
+            {
               "Action": "s3:PutObject",
-              "Condition": Object {
-                "ArnLike": Object {
-                  "aws:SourceArn": Object {
-                    "Fn::GetAtt": Array [
+              "Condition": {
+                "ArnLike": {
+                  "aws:SourceArn": {
+                    "Fn::GetAtt": [
                       "BackupBucket26B8E51C",
                       "Arn",
                     ],
@@ -303,22 +264,22 @@ Object {
                 },
               },
               "Effect": "Allow",
-              "Principal": Object {
+              "Principal": {
                 "Service": "s3.amazonaws.com",
               },
-              "Resource": Array [
-                Object {
-                  "Fn::GetAtt": Array [
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
                     "InventoryBucketA869B8CB",
                     "Arn",
                   ],
                 },
-                Object {
-                  "Fn::Join": Array [
+                {
+                  "Fn::Join": [
                     "",
-                    Array [
-                      Object {
-                        "Fn::GetAtt": Array [
+                    [
+                      {
+                        "Fn::GetAtt": [
                           "InventoryBucketA869B8CB",
                           "Arn",
                         ],
@@ -335,11 +296,11 @@ Object {
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "S3BackupKeyAliasB27C0F2A": Object {
-      "Properties": Object {
+    "S3BackupKeyAliasB27C0F2A": {
+      "Properties": {
         "AliasName": "alias/s3-backup-key",
-        "TargetKeyId": Object {
-          "Fn::GetAtt": Array [
+        "TargetKeyId": {
+          "Fn::GetAtt": [
             "S3BackupKeyB921581F",
             "Arn",
           ],
@@ -347,27 +308,27 @@ Object {
       },
       "Type": "AWS::KMS::Alias",
     },
-    "S3BackupKeyB921581F": Object {
+    "S3BackupKeyB921581F": {
       "DeletionPolicy": "Retain",
-      "Properties": Object {
+      "Properties": {
         "Description": "Key to be used for S3 SSE-KMS",
         "Enabled": true,
-        "KeyPolicy": Object {
-          "Statement": Array [
-            Object {
+        "KeyPolicy": {
+          "Statement": [
+            {
               "Action": "kms:*",
               "Effect": "Allow",
-              "Principal": Object {
-                "AWS": Object {
-                  "Fn::Join": Array [
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
                     "",
-                    Array [
+                    [
                       "arn:",
-                      Object {
+                      {
                         "Ref": "AWS::Partition",
                       },
                       ":iam::",
-                      Object {
+                      {
                         "Ref": "AWS::AccountId",
                       },
                       ":root",
