@@ -1,52 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`creates cost budget 1`] = `
-Object {
-  "Metadata": Object {
-    "AWS::CloudFormation::Interface": Object {
-      "ParameterGroups": Array [
-        Object {
-          "Label": Object {
+{
+  "Metadata": {
+    "AWS::CloudFormation::Interface": {
+      "ParameterGroups": [
+        {
+          "Label": {
             "default": "AWS Budget configuration",
           },
-          "Parameters": Array [
+          "Parameters": [
             "BudgetThreshold",
             "NotificationAddress",
             "NotificationType",
           ],
         },
       ],
-      "ParameterLabels": Object {
-        "BudgetThreshold": Object {
+      "ParameterLabels": {
+        "BudgetThreshold": {
           "default": "Budgeted amount (in USD)",
         },
-        "NotificationAddress": Object {
+        "NotificationAddress": {
           "default": "Address that AWS sends budget notifications to, either an SNS topic or an email",
         },
-        "NotificationType": Object {
+        "NotificationType": {
           "default": "Type of notification that AWS sends to a subscriber",
         },
       },
     },
   },
-  "Outputs": Object {
-    "BudgetName": Object {
-      "Value": Object {
+  "Outputs": {
+    "BudgetName": {
+      "Value": {
         "Ref": "MonthlyBudget",
       },
     },
   },
-  "Parameters": Object {
-    "BudgetThreshold": Object {
+  "Parameters": {
+    "BudgetThreshold": {
       "Default": 50,
       "MinValue": 0,
       "Type": "Number",
     },
-    "NotificationAddress": Object {
+    "NotificationAddress": {
       "Type": "String",
     },
-    "NotificationType": Object {
-      "AllowedValues": Array [
+    "NotificationType": {
+      "AllowedValues": [
         "EMAIL",
         "SNS",
       ],
@@ -54,22 +54,22 @@ Object {
       "Type": "String",
     },
   },
-  "Resources": Object {
-    "MonthlyBudget": Object {
-      "Properties": Object {
-        "Budget": Object {
-          "BudgetLimit": Object {
-            "Amount": Object {
+  "Resources": {
+    "MonthlyBudget": {
+      "Properties": {
+        "Budget": {
+          "BudgetLimit": {
+            "Amount": {
               "Ref": "BudgetThreshold",
             },
             "Unit": "USD",
           },
-          "BudgetName": Object {
-            "Fn::Join": Array [
+          "BudgetName": {
+            "Fn::Join": [
               "",
-              Array [
+              [
                 "monthly-budget-",
-                Object {
+                {
                   "Ref": "AWS::AccountId",
                 },
               ],
@@ -78,92 +78,92 @@ Object {
           "BudgetType": "COST",
           "TimeUnit": "MONTHLY",
         },
-        "NotificationsWithSubscribers": Array [
-          Object {
-            "Notification": Object {
+        "NotificationsWithSubscribers": [
+          {
+            "Notification": {
               "ComparisonOperator": "GREATER_THAN",
               "NotificationType": "FORECASTED",
               "Threshold": 50,
               "ThresholdType": "PERCENTAGE",
             },
-            "Subscribers": Array [
-              Object {
-                "Address": Object {
+            "Subscribers": [
+              {
+                "Address": {
                   "Ref": "NotificationAddress",
                 },
-                "SubscriptionType": Object {
+                "SubscriptionType": {
                   "Ref": "NotificationType",
                 },
               },
             ],
           },
-          Object {
-            "Notification": Object {
+          {
+            "Notification": {
               "ComparisonOperator": "GREATER_THAN",
               "NotificationType": "FORECASTED",
               "Threshold": 100,
               "ThresholdType": "PERCENTAGE",
             },
-            "Subscribers": Array [
-              Object {
-                "Address": Object {
+            "Subscribers": [
+              {
+                "Address": {
                   "Ref": "NotificationAddress",
                 },
-                "SubscriptionType": Object {
+                "SubscriptionType": {
                   "Ref": "NotificationType",
                 },
               },
             ],
           },
-          Object {
-            "Notification": Object {
+          {
+            "Notification": {
               "ComparisonOperator": "GREATER_THAN",
               "NotificationType": "ACTUAL",
               "Threshold": 100,
               "ThresholdType": "PERCENTAGE",
             },
-            "Subscribers": Array [
-              Object {
-                "Address": Object {
+            "Subscribers": [
+              {
+                "Address": {
                   "Ref": "NotificationAddress",
                 },
-                "SubscriptionType": Object {
+                "SubscriptionType": {
                   "Ref": "NotificationType",
                 },
               },
             ],
           },
-          Object {
-            "Notification": Object {
+          {
+            "Notification": {
               "ComparisonOperator": "GREATER_THAN",
               "NotificationType": "ACTUAL",
               "Threshold": 200,
               "ThresholdType": "PERCENTAGE",
             },
-            "Subscribers": Array [
-              Object {
-                "Address": Object {
+            "Subscribers": [
+              {
+                "Address": {
                   "Ref": "NotificationAddress",
                 },
-                "SubscriptionType": Object {
+                "SubscriptionType": {
                   "Ref": "NotificationType",
                 },
               },
             ],
           },
-          Object {
-            "Notification": Object {
+          {
+            "Notification": {
               "ComparisonOperator": "GREATER_THAN",
               "NotificationType": "ACTUAL",
               "Threshold": 300,
               "ThresholdType": "PERCENTAGE",
             },
-            "Subscribers": Array [
-              Object {
-                "Address": Object {
+            "Subscribers": [
+              {
+                "Address": {
                   "Ref": "NotificationAddress",
                 },
-                "SubscriptionType": Object {
+                "SubscriptionType": {
                   "Ref": "NotificationType",
                 },
               },
