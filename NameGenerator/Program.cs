@@ -5,11 +5,11 @@ class Program
 {
     static void Main()
     {
-        var leftIndex = Random.Shared.Next(_left.Count);
-        var rightIndex = Random.Shared.Next(_right.Count);
+        var left = _left[Random.Shared.Next(_left.Count)];
+        var right = _right[Random.Shared.Next(_right.Count)];
+        var randomId = Guid.NewGuid().ToString()[0..4];
 
-        var word = string.Concat(_left[leftIndex], "_", _right[rightIndex]);
-        Console.WriteLine(word);
+        Console.WriteLine($"{left}_{right}_{randomId}");
     }
 
     private static readonly List<string> _left = new()
