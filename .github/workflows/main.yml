@@ -9,6 +9,9 @@ on:
 jobs:
   build-dotnet:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [RandomGen, NameGenerator]
     steps:
     - uses: actions/checkout@v3
 
@@ -18,12 +21,13 @@ jobs:
         dotnet-version: 7.0.x
   
     - name: Build
-      run: |
-        dotnet build RandomGen
-        dotnet build NameGenerator
+      run: dotnet build ${{ matrix.project }}
 
-  build-cdk-budget:
+  build-cdk:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [cost-budget-cdk, s3-backup-cdk]
     steps:
     - uses: actions/checkout@v3
 
@@ -32,32 +36,12 @@ jobs:
       with:
         node-version: 18
         cache: npm
-        cache-dependency-path: cost-budget-cdk/package-lock.json
+        cache-dependency-path: ${{ matrix.project }}/package-lock.json
 
     - name: npm install, build, and synth
       run: |
         npm install -g aws-cdk
-        cd cost-budget-cdk
-        npm install
-        npm run build
-        cdk synth
-
-  build-cdk-backup:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-        cache: npm
-        cache-dependency-path: s3-backup-cdk/package-lock.json
-
-    - name: npm install, build, and synth
-      run: |
-        npm install -g aws-cdk
-        cd s3-backup-cdk
+        cd ${{ matrix.project }}
         npm install
         npm run build
         cdk synth
