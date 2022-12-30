@@ -5,14 +5,14 @@ class Program
 {
     static void Main()
     {
-        var left = _left[Random.Shared.Next(_left.Count)];
-        var right = _right[Random.Shared.Next(_right.Count)];
-        var randomId = Guid.NewGuid().ToString()[0..4];
+        var adjective = _adjectives[Random.Shared.Next(_adjectives.Count)];
+        var name = _names[Random.Shared.Next(_names.Count)];
+        var id = Guid.NewGuid().ToString()[0..4];
 
-        Console.WriteLine($"{left}_{right}_{randomId}");
+        Console.WriteLine($"{adjective}_{name}_{id}");
     }
 
-    private static readonly List<string> _left = new()
+    private static readonly List<string> _adjectives = new()
     {
         "admiring",
         "adoring",
@@ -124,7 +124,7 @@ class Program
         "zen",
     };
 
-    private static readonly List<string> _right = new()
+    private static readonly List<string> _names = new()
     {
         // Muhammad ibn Jābir al-Ḥarrānī al-Battānī was a founding father of astronomy. https://en.wikipedia.org/wiki/Al-Battani
         "albattani",
