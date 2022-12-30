@@ -19,7 +19,7 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-  
+
     - name: Build
       run: dotnet build ${{ matrix.project }}
 
@@ -42,6 +42,6 @@ jobs:
       run: |
         npm install -g aws-cdk
         cd ${{ matrix.project }}
-        npm install
+        npm ci
         npm run build
         cdk synth
