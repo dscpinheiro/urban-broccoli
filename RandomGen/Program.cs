@@ -13,7 +13,8 @@ namespace RandomGen
         static void Main()
         {
             BuildDictionary();
-            Console.WriteLine($"Random value: {GenerateValue()}");
+            Console.WriteLine($"Random value (alpha numeric): {GenerateValue()}");
+            Console.WriteLine($"Random value (special chars): {GenerateValue(includeSpecialCharacters: true)}");
             Console.WriteLine($"Random phrase: {GeneratePhrase()}");
             Console.WriteLine($"Random guid: {Guid.NewGuid()}");
         }
