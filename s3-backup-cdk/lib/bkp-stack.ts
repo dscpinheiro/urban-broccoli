@@ -2,8 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import {
     aws_s3 as s3,
-    aws_kms as kms,
-    aws_iam as iam
+    aws_kms as kms
 } from 'aws-cdk-lib';
 
 export class BackupStack extends cdk.Stack {
