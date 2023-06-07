@@ -82,7 +82,6 @@ export class BudgetAppStack extends cdk.Stack {
                     },
                     subscribers: budgetSubscribers
                 },
-
                 {
                     notification: {
                         comparisonOperator: 'GREATER_THAN',
