@@ -1,0 +1,18 @@
+name: check-pr-destination-branch
+on:
+  pull_request:
+    types: [synchronize, opened, reopened, edited]
+env:
+  PROTECTED_BRANCH_NAME: main
+
+jobs:
+  check-pr-destination-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - run: env | sort -f
+      - uses: actions/github-script@v7.0.1
+        if: ${{ env.GITHUB_BASE_REF }} != ${{ env.PROTECTED_BRANCH_NAME }}
+        with:
+          script: |
+            core.setFailed('PRs must target either main-staging or a feature branch')
