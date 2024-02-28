@@ -1,0 +1,18 @@
+name: check-pr-destination-branch
+on: [pull_request]
+env:
+  DESTINATION_BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+  PROTECTED_BRANCH_NAME: main
+
+jobs:
+  check-bats-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - run: echo "$PROTECTED_BRANCH_NAME"
+      - run: echo "$DESTINATION_BRANCH_NAME"
+      - uses: actions/github-script@v7.0.1
+        if: ${{ DESTINATION_BRANCH_NAME == PROTECTED_BRANCH_NAME }}
+        with:
+          script: |
+            core.setFailed('PRs must target either main-staging or a feature branch')
