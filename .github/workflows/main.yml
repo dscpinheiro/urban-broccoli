@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project: [cost-budget-cdk, s3-backup-cdk]
+        project: [s3-backup-cdk]
     steps:
     - uses: actions/checkout@v4
 
