@@ -11,14 +11,6 @@ exports[`creates backup bucket and kms key 1`] = `
         ],
       },
     },
-    "InventoryBucketArn": {
-      "Value": {
-        "Fn::GetAtt": [
-          "InventoryBucketA869B8CB",
-          "Arn",
-        ],
-      },
-    },
     "KmsKeyArn": {
       "Value": {
         "Fn::GetAtt": [
@@ -48,32 +40,6 @@ exports[`creates backup bucket and kms key 1`] = `
             },
           ],
         },
-        "InventoryConfigurations": [
-          {
-            "Destination": {
-              "BucketAccountId": {
-                "Ref": "AWS::AccountId",
-              },
-              "BucketArn": {
-                "Fn::GetAtt": [
-                  "InventoryBucketA869B8CB",
-                  "Arn",
-                ],
-              },
-              "Format": "CSV",
-            },
-            "Enabled": true,
-            "Id": "backup-inventory",
-            "IncludedObjectVersions": "Current",
-            "OptionalFields": [
-              "Size",
-              "LastModifiedDate",
-              "StorageClass",
-              "ETag",
-            ],
-            "ScheduleFrequency": "Weekly",
-          },
-        ],
         "LifecycleConfiguration": {
           "Rules": [
             {
@@ -154,133 +120,6 @@ exports[`creates backup bucket and kms key 1`] = `
                       {
                         "Fn::GetAtt": [
                           "BackupBucket26B8E51C",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::S3::BucketPolicy",
-    },
-    "InventoryBucketA869B8CB": {
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "BucketEncryption": {
-          "ServerSideEncryptionConfiguration": [
-            {
-              "ServerSideEncryptionByDefault": {
-                "SSEAlgorithm": "AES256",
-              },
-            },
-          ],
-        },
-        "LifecycleConfiguration": {
-          "Rules": [
-            {
-              "AbortIncompleteMultipartUpload": {
-                "DaysAfterInitiation": 7,
-              },
-              "ExpirationInDays": 45,
-              "Id": "InventoryLifecycleRule",
-              "Status": "Enabled",
-            },
-          ],
-        },
-        "OwnershipControls": {
-          "Rules": [
-            {
-              "ObjectOwnership": "BucketOwnerEnforced",
-            },
-          ],
-        },
-        "PublicAccessBlockConfiguration": {
-          "BlockPublicAcls": true,
-          "BlockPublicPolicy": true,
-          "IgnorePublicAcls": true,
-          "RestrictPublicBuckets": true,
-        },
-      },
-      "Type": "AWS::S3::Bucket",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "InventoryBucketPolicyEDF94353": {
-      "Properties": {
-        "Bucket": {
-          "Ref": "InventoryBucketA869B8CB",
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": "false",
-                },
-              },
-              "Effect": "Deny",
-              "Principal": {
-                "AWS": "*",
-              },
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "InventoryBucketA869B8CB",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "InventoryBucketA869B8CB",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            {
-              "Action": "s3:PutObject",
-              "Condition": {
-                "ArnLike": {
-                  "aws:SourceArn": {
-                    "Fn::GetAtt": [
-                      "BackupBucket26B8E51C",
-                      "Arn",
-                    ],
-                  },
-                },
-              },
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "s3.amazonaws.com",
-              },
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "InventoryBucketA869B8CB",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "InventoryBucketA869B8CB",
                           "Arn",
                         ],
                       },

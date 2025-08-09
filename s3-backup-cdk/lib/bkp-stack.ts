@@ -17,21 +17,6 @@ export class BackupStack extends cdk.Stack {
             keyUsage: kms.KeyUsage.ENCRYPT_DECRYPT
         });
 
-        const inventoryBucket = new s3.Bucket(this, 'InventoryBucket', {
-            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-            enforceSSL: true,
-            encryption: s3.BucketEncryption.S3_MANAGED,
-            objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
-            lifecycleRules: [
-                {
-                    id: 'InventoryLifecycleRule',
-                    enabled: true,
-                    abortIncompleteMultipartUploadAfter: cdk.Duration.days(7),
-                    expiration: cdk.Duration.days(45)
-                }
-            ]
-        });
-
         const backupBucket = new s3.Bucket(this, 'BackupBucket', {
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
             bucketKeyEnabled: true,
@@ -62,23 +47,9 @@ export class BackupStack extends cdk.Stack {
             ],
             objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_ENFORCED,
             versioned: true,
-            inventories: [
-                {
-                    inventoryId: 'backup-inventory',
-                    frequency: s3.InventoryFrequency.WEEKLY,
-                    includeObjectVersions: s3.InventoryObjectVersion.CURRENT,
-                    enabled: true,
-                    destination: {
-                        bucket: inventoryBucket,
-                        bucketOwner: cdk.Aws.ACCOUNT_ID
-                    },
-                    optionalFields: ['Size', 'LastModifiedDate', 'StorageClass', 'ETag']
-                }
-            ]
         });
 
         new cdk.CfnOutput(this, 'KmsKeyArn', { value: backupKey.keyArn });
         new cdk.CfnOutput(this, 'BackupBucketArn', { value: backupBucket.bucketArn });
-        new cdk.CfnOutput(this, 'InventoryBucketArn', { value: inventoryBucket.bucketArn });
     }
 }
