@@ -1,67 +1,29 @@
-name: Permission Check Test
+name: Label Build Test
 
 permissions: {}
 
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types: [labeled]
 
 jobs:
-  test:
-    name: test
+  build:
+    name: build
     if: >-
-      github.event.issue.pull_request &&
-      github.event.comment.body == '/run-build' &&
-      contains(fromJSON('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+      github.event.label.name == 'run-build' &&
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
-      issues: write          # comment on the associated issue
-      pull-requests: write   # react to PR conversation
-      statuses: write        # post the commit status that shows as a PR check
+      issues: write          # remove the label via the issues API
       contents: read
     steps:
-      - name: Verify requester permission
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
-        run: |
-          push=$(gh api "repos/$REPO/collaborators/$COMMENT_AUTHOR/permission" --jq .user.permissions.push)
-          echo "push permission: $push"
-          [ "$push" = "true" ] || { echo "::error::$COMMENT_AUTHOR lacks push access; refusing build"; exit 1; }
-      - name: Resolve PR head SHA
-        id: pr
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          PR_NUMBER: ${{ github.event.issue.number }}
-        run: echo "head_sha=$(gh api "repos/$REPO/pulls/$PR_NUMBER" --jq .head.sha)" >> "$GITHUB_OUTPUT"
-      - name: Mark check pending
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
-        run: |
-          gh api -X POST "repos/$REPO/statuses/$HEAD_SHA" \
-            -f state=pending -f context=build-sdk-v4 -f description="Build running" \
-            -f target_url="https://github.com/$REPO/actions/runs/${{ github.run_id }}"
-      - name: Acknowledge
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          COMMENT_ID: ${{ github.event.comment.id }}
-        run: gh api -X POST "repos/$REPO/issues/comments/$COMMENT_ID/reactions" -f content=eyes
       - name: Placeholder build
         run: echo "would build here"
-      - name: Report final check
-        if: always() && steps.pr.outputs.head_sha != ''
+      - name: Remove run-build label
+        if: always()
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           REPO: ${{ github.repository }}
-          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
-          RESULT: ${{ job.status }}
-        run: |
-          state=success; [ "$RESULT" = "success" ] || state=failure
-          gh api -X POST "repos/$REPO/statuses/$HEAD_SHA" \
-            -f state=$state -f context=build-sdk-v4 -f description="Build $state" \
-            -f target_url="https://github.com/$REPO/actions/runs/${{ github.run_id }}"
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh api -X DELETE "repos/$REPO/issues/$PR_NUMBER/labels/run-build" || true
