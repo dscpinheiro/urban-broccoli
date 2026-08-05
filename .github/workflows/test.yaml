@@ -1,0 +1,39 @@
+name: Permission Check Test
+
+permissions: {}
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  test:
+    name: test
+    if: >-
+      github.event.issue.pull_request &&
+      github.event.comment.body == '/run-build' &&
+      contains(fromJSON('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write        # needed for the reaction; default token otherwise
+      contents: read
+    steps:
+      - name: Verify requester permission
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          COMMENT_AUTHOR: ${{ github.event.comment.user.login }}
+        run: |
+          echo "association was: ${{ github.event.comment.author_association }}"
+          push=$(gh api "repos/$REPO/collaborators/$COMMENT_AUTHOR/permission" --jq .user.permissions.push)
+          echo "push permission: $push"
+          [ "$push" = "true" ] || { echo "::error::$COMMENT_AUTHOR lacks push access; refusing build"; exit 1; }
+      - name: Acknowledge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          COMMENT_ID: ${{ github.event.comment.id }}
+        run: gh api -X POST "repos/$REPO/issues/comments/$COMMENT_ID/reactions" -f content=eyes
+      - name: Placeholder build
+        run: echo "would build here"
+  
