@@ -15,7 +15,8 @@ jobs:
       contains(fromJSON('["OWNER", "MEMBER"]'), github.event.comment.author_association)
     runs-on: ubuntu-latest
     permissions:
-      issues: write        # needed for the reaction; default token otherwise
+      issues: write          # comment on the associated issue
+      pull-requests: write   # react to / comment on PR conversation
       contents: read
     steps:
       - name: Verify requester permission
@@ -36,4 +37,3 @@ jobs:
         run: gh api -X POST "repos/$REPO/issues/comments/$COMMENT_ID/reactions" -f content=eyes
       - name: Placeholder build
         run: echo "would build here"
-  
