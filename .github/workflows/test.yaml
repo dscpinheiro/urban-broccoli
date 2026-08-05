@@ -14,7 +14,8 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
-      issues: write          # remove the label via the issues API
+      issues: write          # label API path is /issues/
+      pull-requests: write   # ...but PR-targeted label ops are gated on this
       contents: read
     steps:
       - name: Placeholder build
